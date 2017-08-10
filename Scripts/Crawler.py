@@ -1,4 +1,4 @@
-import requests
+
 
 #from main import crawler
 from bs4 import BeautifulSoup
@@ -10,6 +10,7 @@ import nltk
 
 from nltk.stem.snowball import SnowballStemmer
 from nltk.tokenize import RegexpTokenizer
+
 
 
 """
@@ -57,8 +58,11 @@ class crawler:
 
         #Stemming of the text
         print("Stemming of the words")
+
+
         stemmer = SnowballStemmer("english")
         stemmed_tokens = [stemmer.stem(t) for t in tokens]
+
 
 
 
@@ -87,6 +91,14 @@ class crawler:
         print("The final output of the most frequent and relevnat terms are :")
         print(sorted(l, key=l.get, reverse=True)[:15])
 
+def check_continue():
+    val=str(input("Do you wish to retry?Press y/n   "))
+    if(val=='y' or val=='Y'):
+        user_input()
+    else:
+        print("Exiting........")
+        quit()
+
 def user_input():
 
     try:
@@ -95,31 +107,29 @@ def user_input():
         print('The server could not fulfill the request')
         print('Error code: ', e.code)
         user_input=False
-
+        check_continue()
     except URLError as e:
         print('We failed to reach a server.')
         print('Reason: ', e.reason)
-        user_input = False
+        user_input=False
+        check_continue()
     except NameError as e:
         print("Some error in the input URL that you are trying to enter.")
         print('Error: ', e)
         user_input = False
+        check_continue()
     except Exception as e:
         print('There is error in the URL you have entered :',e)
-        user_input = False
+        user_input=False
+        check_continue()
 
     else:
         #user_input = True
         crawl = crawler(mainURL)
         crawl.getHtml()
+        k = input("press any key to exit")
         quit()
 
 while user_input :
+
     user_input()
-    val=str(input("Do you wish to retry?Press y/n   "))
-    choice = {'y': 1, 'n': 2, 'Y': 3, 'N': 4}
-    if(choice.keys() is val):
-        user_input()
-    else:
-        print("Exiting......")
-        quit()
